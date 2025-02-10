@@ -1,15 +1,16 @@
 import React ,{ useState } from 'react';
 import {evaluate} from "mathjs"
 import './App.css';
-
+import Title from './components/title';
+import Modal from './components/modal';
 function App() {
   const [display,setDisplay] = useState("")
   const [expression,setExpression] = useState([])
-
+  const [showmodal,setShowmodal] = useState(localStorage.getItem("showmodal") !== "false")
   const handleResult = () =>{
     const result = expression.join("")
     const res = evaluate(result)
-      
+    
     setDisplay(res)
     
     setExpression([res])
@@ -21,9 +22,13 @@ function App() {
     setExpression([...expression,value])
 
   }
-
+  const handleClose = ()=> {
+      setShowmodal(false)
+      localStorage.setItem("showmodal", "false");
+  }
   return (
     <div className='App'>
+        {<Title title="my fav movie"/>  }    
         <h3 className="display">{display}</h3>
         <span className='expression'>{expression}</span>
 
@@ -51,6 +56,11 @@ function App() {
           <button onClick={()=> handleResult()}>=</button>
           </section>
         </section>
+       {showmodal &&< Modal handleClose = {handleClose}>
+        {console.log(showmodal)}
+          <h2>10% percent</h2>
+          <p>somthing about percent ...</p>
+        </Modal>}
     </div>
   );
 }
