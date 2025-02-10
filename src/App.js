@@ -1,44 +1,56 @@
-import { useState } from 'react';
+import React ,{ useState } from 'react';
+import {evaluate} from "mathjs"
 import './App.css';
 
 function App() {
-  // let name = "mahdi"
-  const [show,setShow] = useState(true)
+  const [display,setDisplay] = useState("")
+  const [expression,setExpression] = useState([])
 
-  const [events,setEvents] = useState([
-    {title : "thor", id:1},
-    {title : "man", id:2},
-    {title: 'three',id :3}
-  ])
+  const handleResult = () =>{
+    const result = expression.join("")
+    const res = evaluate(result)
+      
+    setDisplay(res)
+    
+    setExpression([res])
 
-  const handeleClick = (id) => {
-    setEvents((preevents)=> {
-      return preevents.filter((event)=>{
-        return id !== event.id
-      })
-    })}
+  }
 
-  
+  const handleClick = (value) => {
+    setDisplay(value)
+    setExpression([...expression,value])
+
+  }
 
   return (
     <div className='App'>
-      {show &&<div>
-        <button onClick={()=>setShow(false)}> Hide </button>
-      </div>}
-      {!show &&<div>
-        <button onClick={()=>setShow(true)}> show </button>
-      </div>}
+        <h3 className="display">{display}</h3>
+        <span className='expression'>{expression}</span>
 
-    {show &&
-      events.map((event) => (
-        <div key={event.id}>
-          <h2>
-            {event.title}
-          </h2>
-          <button onClick={()=>handeleClick(event.id)}> Delete</button>
-        </div>
-      ))
-    }
+        <section className='panel'>
+          <section className='numbers'>
+            <button onClick={()=> handleClick(7)}>7</button>
+            <button onClick={()=> handleClick(8)}>8</button>
+            <button onClick={()=> handleClick(9)}>9</button>
+            
+            <button onClick={()=> handleClick(4)}>4</button>
+            <button onClick={()=> handleClick(5)}>5</button>
+            <button onClick={()=> handleClick(6)}>6</button>
+
+            <button onClick={()=> handleClick(1)}>1</button>
+            <button onClick={()=> handleClick(2)}>2</button>
+            <button onClick={()=> handleClick(3)}>3</button>
+
+            <button onClick={()=> handleClick(0)}>0</button>
+          </section>
+          <section className='operation'> 
+          <button onClick={()=> handleClick("/")}>/</button>
+          <button onClick={()=> handleClick("*")}>*</button>
+          <button onClick={()=> handleClick("-")}>-</button>
+          <button onClick={()=> handleClick("+")}>+</button>
+          <button onClick={()=> handleResult()}>=</button>
+          </section>
+        </section>
     </div>
   );
 }
